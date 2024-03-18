@@ -55,7 +55,7 @@ export async function node(
           } else if (countValues1 > (N / 2)) {
             v = 1;
           }
-          await sendAllMessage("P",k, v, N);
+          sendAllMessage("P",k, v, N);
         }
       } 
       else if (R == "P") {
@@ -70,12 +70,15 @@ export async function node(
             const totalValues = countValues0 + countValues1;
             nodeState.x = totalValues > 0 ? (countValues0 > countValues1 ? 0 : 1) : Math.random() > 0.5 ? 0 : 1;
             nodeState.k = k + 1;
-            await sendAllMessage("R", k+1, nodeState.x, N);
+            sendAllMessage("R", k+1, nodeState.x, N);
           }
         }
       }
+      res.status(200).send("message");
     }
-    res.status(200).send("message received");
+    else {
+      res.status(500).send("faulty");
+    }
   });
 
 
@@ -84,7 +87,7 @@ export async function node(
       nodeState.decided = false;
       nodeState.x = initialValue;
       nodeState.k = 1;
-      await sendAllMessage("R", nodeState.k, nodeState.x, N);
+      sendAllMessage("R", nodeState.k, nodeState.x, N);
     }
     res.status(200).send("started");
   });
@@ -132,4 +135,3 @@ function countValues(array: any[]) {
   let countValues1 = array.filter((value) => value == 1).length;
   return { countValues0, countValues1 };
 }
-
